@@ -1,0 +1,14 @@
+.azure/
+.env
+.env.*
+azure.yaml
+appsettings*.json
+*.pdb
+*.log
+*.key
+*.pem
+*.user
+NuGet.Config
+nuget.config
+obj/
+bin/

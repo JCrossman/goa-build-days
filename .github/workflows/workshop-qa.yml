@@ -1,0 +1,74 @@
+name: Workshop QA
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      demonstrate_failure:
+        description: Run the intentional workshop failure fixture
+        type: boolean
+        default: false
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      WORKSHOP_QA_DEMONSTRATE_FAILURE: ${{ github.event_name == 'workflow_dispatch' && inputs.demonstrate_failure && 'true' || 'false' }}
+    steps:
+      - name: Check out the starter
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - name: Install .NET
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          global-json-file: global.json
+      - name: Install Node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Restore
+        run: dotnet restore GoaBuildDays.sln --locked-mode
+      - name: Build
+        run: dotnet build GoaBuildDays.sln --no-restore
+      - name: Run .NET checks
+        id: dotnet
+        run: dotnet test tests/ServiceGuide.Tests --no-build --no-restore --logger "trx;LogFileName=qa.trx" --results-directory artifacts/dotnet
+      - name: Install browser checks
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run browser checks
+        id: browser
+        run: npm run test:browser
+      - name: Summarize the checks
+        if: always()
+        env:
+          DOTNET_RESULT: ${{ steps.dotnet.outcome }}
+          BROWSER_RESULT: ${{ steps.browser.outcome }}
+        run: |
+          {
+            echo "## Workshop QA"
+            echo "- .NET checks: ${DOTNET_RESULT:-not run}"
+            echo "- Browser checks: ${BROWSER_RESULT:-not run}"
+            echo "- Intentional failure selected: $WORKSHOP_QA_DEMONSTRATE_FAILURE"
+            echo ""
+            echo "The run conclusion is the QA result. An agentic review cannot change it."
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Save test evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: workshop-qa-evidence
+          path: |
+            artifacts/dotnet
+            playwright-report
+            test-results
+          if-no-files-found: warn
+          retention-days: 7
