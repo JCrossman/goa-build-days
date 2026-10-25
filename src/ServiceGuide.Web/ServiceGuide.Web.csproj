@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceGuide.Shared\ServiceGuide.Shared.csproj" />
+    <ProjectReference Include="..\ServiceGuide.Foundry\ServiceGuide.Foundry.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\ServiceGuide.Foundry\FoundryAgents.cs" LogicalName="Examples.Native" />
+    <EmbeddedResource Include="..\..\examples\MafHosted\MafAgentFactory.cs" LogicalName="Examples.Maf" />
+    <EmbeddedResource Include="..\ServiceGuide.Shared\LookupTool.cs" LogicalName="Examples.Tool" />
+    <EmbeddedResource Include="..\ServiceGuide.Shared\AgentInstructions.txt" LogicalName="Examples.Instructions" />
+  </ItemGroup>
+
+</Project>

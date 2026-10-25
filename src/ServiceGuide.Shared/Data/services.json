@@ -1,0 +1,79 @@
+[
+  {
+    "id": "AB-RENEW-01",
+    "title": "Renew in person",
+    "category": "Renewal",
+    "summary": "Bring your driver's licence to an Alberta registry agent to renew. Check the official guidance for any additional documents or medical forms before your visit.",
+    "nextStep": "Read Alberta's renewal instructions, then contact a registry agent to confirm what to bring. This app cannot renew your licence.",
+    "keywords": ["renew", "renewal", "renewals", "renewing", "licence", "license", "licences", "licenses", "driver", "drivers", "driving", "person"],
+    "sourceTitle": "Renew or replace a driver's licence",
+    "sourceUrl": "https://www.alberta.ca/renew-replace-drivers-licence",
+    "reviewedOn": "2026-10-25"
+  },
+  {
+    "id": "AB-RENEW-02",
+    "title": "Check online renewal availability",
+    "category": "Online renewal",
+    "summary": "At the last source review, Alberta.ca said online driver's licence renewal was temporarily disabled. This saved guidance cannot confirm whether that is still the case.",
+    "nextStep": "Check the official renewal page for current online availability. If it is unavailable, contact a registry agent about renewing in person.",
+    "keywords": ["online", "internet", "digitally", "website", "availability", "disabled", "unavailable"],
+    "sourceTitle": "Renew or replace a driver's licence",
+    "sourceUrl": "https://www.alberta.ca/renew-replace-drivers-licence",
+    "reviewedOn": "2026-10-25"
+  },
+  {
+    "id": "AB-RENEW-03",
+    "title": "Prepare your documents",
+    "category": "What to bring",
+    "summary": "Have your driver's licence ready. Check whether you need to bring proof of legal entitlement; the official page lists accepted original documents and health-card guidance for the integrated card.",
+    "nextStep": "Review the official document requirements and confirm your checklist with a registry agent. Do not enter or upload personal documents in this demo.",
+    "keywords": ["bring", "documents", "document", "documentation", "checklist", "prepare", "preparation", "identification", "id", "proof", "citizenship", "phn", "health"],
+    "sourceTitle": "New driver's licence and identification cards",
+    "sourceUrl": "https://www.alberta.ca/new-drivers-licence-and-identification-cards",
+    "reviewedOn": "2026-10-25"
+  },
+  {
+    "id": "AB-RENEW-04",
+    "title": "If your licence has expired",
+    "category": "Expired licence",
+    "summary": "It is illegal to drive with an expired licence. Alberta.ca describes additional identification requirements or testing depending on how long the licence has been expired.",
+    "nextStep": "Read the expired-licence section of the official renewal page and contact a registry agent. This demo cannot decide which requirements apply to you.",
+    "keywords": ["expired", "lapsed", "expire", "expiry"],
+    "sourceTitle": "Renew or replace a driver's licence",
+    "sourceUrl": "https://www.alberta.ca/renew-replace-drivers-licence",
+    "reviewedOn": "2026-10-25"
+  },
+  {
+    "id": "AB-RENEW-05",
+    "title": "Find a registry agent",
+    "category": "Registry",
+    "summary": "Alberta.ca provides a registry finder for registration, information, and licensing services. This demo does not know which office is nearest to you or currently open.",
+    "nextStep": "Open the official finder and contact your chosen office to confirm hours and renewal services. No address or location sharing is needed in this demo.",
+    "keywords": ["registry", "registries", "agent", "agents", "office", "offices", "where", "near", "nearest", "nearby", "location", "locations", "hours", "appointment", "appointments", "booking"],
+    "sourceTitle": "Find a registry agent",
+    "sourceUrl": "https://www.alberta.ca/lookup/find-a-registry-agent.aspx",
+    "reviewedOn": "2026-10-25"
+  },
+  {
+    "id": "AB-RENEW-06",
+    "title": "Check renewal fees",
+    "category": "Fees",
+    "summary": "The official renewal page links to the Registry Agent Product Catalogue for maximum renewal charges. This demo does not quote a price or take payment.",
+    "nextStep": "Use the cost section on Alberta's renewal page and confirm the fee with your registry agent.",
+    "keywords": ["fee", "fees", "cost", "costs", "price", "pricing", "charge", "charges", "payment"],
+    "sourceTitle": "Renew or replace a driver's licence",
+    "sourceUrl": "https://www.alberta.ca/renew-replace-drivers-licence",
+    "reviewedOn": "2026-10-25"
+  },
+  {
+    "id": "AB-RENEW-07",
+    "title": "Ask about special renewal situations",
+    "category": "Other renewal situations",
+    "summary": "Alberta.ca describes remote renewal when temporarily outside Alberta or medically homebound, and situations requiring a medical form. A registry agent can explain the applicable process.",
+    "nextStep": "Read the relevant section on the official renewal page and contact a registry agent. Do not share medical or immigration details in this demo.",
+    "keywords": ["remote", "remotely", "outside", "away", "homebound", "medical", "condition", "professional", "commercial"],
+    "sourceTitle": "Renew or replace a driver's licence",
+    "sourceUrl": "https://www.alberta.ca/renew-replace-drivers-licence",
+    "reviewedOn": "2026-10-25"
+  }
+]
