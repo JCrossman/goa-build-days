@@ -10,9 +10,11 @@ states, not pre-existing Git tags.
 | Lookup | Reviewed shared lookup code and tests. | Catalogue and lookup tests pass. |
 | Native agent | Agent name and explicit version returned by `create`. | `ask` and the app show a live lookup. |
 
-The checked-in app is runnable; the `paperwork` synonym is deliberately left
-as the Lab 1 exercise. For another attempt, use a new Copilot app worktree
-from the facilitator's starter revision and carry over your specification.
+The checked-in app is runnable; this fork's `main` includes the completed
+`paperwork` exercise. For another attempt, use a new Copilot app worktree
+from the facilitator's untouched Node starter revision `92f85be` and carry
+over your specification. Apply dependency remediation `d138f0d` and
+service-envelope fix `cad1f63` before live Foundry use.
 Do not hard-reset or discard your current changes.
 
 Do not reassign CCA to restart work that is already running. Use its existing

@@ -29,6 +29,13 @@ See the [workshop plan](docs/workshop-plan.md) for the agenda and optional
 capstone. Each runnable lab has numbered steps and copy-ready prompts. Work
 through the core labs in order.
 
+This fork's `main` now includes the completed `paperwork` and QA-reporting
+lab changes. For an untouched Node exercise, start from
+[`92f85be`](https://github.com/JCrossman/goa-build-days/tree/92f85bed54f3cfa3cca1ea9f37364b0de524a3f8);
+apply dependency remediation `d138f0d` and service-envelope fix `cad1f63`
+before using its Foundry path.
+An organizer rehearsal is not proof of each participant's account access.
+
 ## Set up before the workshop
 
 | Tool | Get ready |
@@ -123,7 +130,7 @@ npm run test:browser
 
 The test command runs the built Node.js built-in test runner. The browser suite
 starts and stops its own offline server on port 5089, separate from the
-preview. Migration verification passed 71 Node unit/HTTP/SDK checks and 20
+preview. Current local verification passed 73 Node unit/HTTP/SDK checks and 20
 browser checks across desktop and mobile viewports.
 The core test coverage is ported into `tests/catalogue.test.ts`,
 `tests/configuration.test.ts`, `tests/native-agent.test.ts`,

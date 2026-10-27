@@ -60,12 +60,13 @@ using their own approved accounts.** Portal sign-in alone is not enough.
 Resolve blocked access in a setup clinic. A facilitator demo, shared
 credentials, or a mock response does not count as a developer's access check.
 
-The checked-in GH-AW review workflow requests organization-billed
-`copilot-requests: write`. A personal fork does not inherit that entitlement.
-The repository owner must adapt the source for an approved authentication
-method, recompile it with gh-aw v0.89.21, and configure any required GitHub-side
-secrets before the personal-account reviewer exercise can run. Never request
-secrets in chat or use a broad app token as a workaround.
+This personal fork's GH-AW reviewer uses the user-configured
+`COPILOT_GITHUB_TOKEN` Actions repository secret. It must be a personal
+fine-grained PAT with Account permission **Copilot Requests: Read**; see
+[prework](prework.md#3-prepare-gh-aw). Do not add organization-billed
+`copilot-requests: write` alongside it, because that ignores the personal
+secret for inference. Recompile source changes with gh-aw v0.89.21. Never
+request secrets in chat or use a broad app token as a workaround.
 
 Use synthetic user scenarios and reviewed public guidance. Keep credentials
 out of code, prompts, and logs; share environment details privately. Do not
