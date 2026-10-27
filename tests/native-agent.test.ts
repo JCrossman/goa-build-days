@@ -67,7 +67,8 @@ test("official SDK transport sends explicit agent name AND version on every tool
   assert.equal(result.toolActivity[0]?.status, "found");
   assert.equal(requests.length, 2);
   for (const request of requests) {
-    assert.deepEqual(request.agent, { type: "agent_reference", name: "native-fixture", version: "2" });
+    assert.deepEqual(request.agent_reference, { type: "agent_reference", name: "native-fixture", version: "2" });
+    assert.equal(request.agent, undefined);
     assert.equal(request.max_output_tokens, 1_200);
     assert.equal(request.model, undefined, "must invoke versioned agent, not a direct model");
   }

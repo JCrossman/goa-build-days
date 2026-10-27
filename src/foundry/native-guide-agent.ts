@@ -60,7 +60,7 @@ export class NativeGuideAgent implements GuideAgent {
       const response = await this.transport.create(request, {
         ...(signal === undefined ? {} : { signal }),
         // Include the complete payload so an injected official OpenAI client also preserves input.
-        body: { ...request, agent: { type: "agent_reference", name: this.identity.name, version: this.identity.version } },
+        body: { ...request, agent_reference: { type: "agent_reference", name: this.identity.name, version: this.identity.version } },
       });
       signal?.throwIfAborted();
       if (response.status !== "completed") {
