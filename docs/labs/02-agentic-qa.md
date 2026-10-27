@@ -21,13 +21,13 @@ Before the agent starts, a deterministic job validates the selected run and
 checks for an existing report. Issue creation is blocked for passing or
 already-reported runs.
 
-The checked-in reviewer currently uses organization-billed
-`copilot-requests: write` authentication. A personal fork does not inherit
-that billing entitlement. The repository owner must first adapt and recompile
-the source for the workshop's approved authentication and configure any
-required GitHub-side secrets. If that is not complete, treat live reviewer
-runs as blocked; do not paste secrets into chat or replace the auth with a
-broad app token.
+This personal-fork reviewer uses a user-configured `COPILOT_GITHUB_TOKEN`
+Actions secret, with a personal fine-grained PAT granting **Copilot Requests:
+Read**. See [prework](../prework.md#3-prepare-gh-aw) for the exact setup.
+The source deliberately omits organization-billed `copilot-requests: write`;
+adding it would ignore the personal secret for inference. If authentication
+is not configured and verified by an actual reviewer run, treat live runs as
+blocked; do not paste secrets into chat or use a broad app token.
 
 Copy each text prompt into the Copilot app chat. Replace `<QA_RUN_ID>` with
 the numeric ID returned by the QA run, not a PR number or the review run's ID.
@@ -49,7 +49,7 @@ Do not edit, compile, publish, or run anything yet.
 
 **Review:** Find `workflow_dispatch` and `create-issue` with `max: 1`.
 There must be no automatic merge, deployment, or agent assignment. Confirm
-that the current organization-billed authentication is available before
+that the approved personal-token authentication is configured before
 planning any live run.
 
 ## 2. After Lab 1, make one small workflow change

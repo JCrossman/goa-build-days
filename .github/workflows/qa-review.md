@@ -12,7 +12,6 @@ on:
 permissions:
   contents: read
   actions: read
-  copilot-requests: write
 engine: copilot
 checkout: false
 network: defaults
@@ -41,6 +40,7 @@ jobs:
       conclusion: ${{ steps.result.outputs.conclusion }}
       allow_issue: ${{ steps.result.outputs.allow_issue }}
       existing_issue: ${{ steps.result.outputs.existing_issue }}
+      tested_sha: ${{ steps.result.outputs.tested_sha }}
     steps:
       - name: Validate the QA run
         id: result
@@ -59,6 +59,7 @@ jobs:
             (.id | tostring) == $id and
             .repository.full_name == $repo and
             .path == ".github/workflows/workshop-qa.yml" and
+            (.head_sha | test("^[0-9a-f]{40}$")) and
             .status == "completed" and
             (.conclusion == "success" or .conclusion == "failure")
           ' "$RUNNER_TEMP/qa-run.json" > /dev/null; then
@@ -66,6 +67,7 @@ jobs:
             exit 1
           fi
           RESULT=$(jq -r '.conclusion' "$RUNNER_TEMP/qa-run.json")
+          TESTED_SHA=$(jq -r '.head_sha' "$RUNNER_TEMP/qa-run.json")
           EXISTING=""
           ALLOW_ISSUE=false
           if [[ "$RESULT" == "failure" ]]; then
@@ -80,11 +82,13 @@ jobs:
             echo "conclusion=$RESULT"
             echo "allow_issue=$ALLOW_ISSUE"
             echo "existing_issue=$EXISTING"
+            echo "tested_sha=$TESTED_SHA"
           } >> "$GITHUB_OUTPUT"
           {
             echo "## QA review target"
             echo "- Repository: $REPO"
             echo "- QA run: $RUN_ID"
+            echo "- Tested commit SHA: $TESTED_SHA"
             echo "- Actual QA result: $RESULT"
             if [[ -n "$EXISTING" ]]; then echo "- Existing failure issue: $EXISTING"; fi
             echo ""
@@ -100,17 +104,20 @@ jobs:
 Review Workshop QA run `${{ github.event.inputs.run_id }}` in
 `${{ github.repository }}`. This is an explanation task, not a repair task.
 The validated QA conclusion is `${{ needs.validate_run.outputs.conclusion }}`.
+The exact tested commit SHA is `${{ needs.validate_run.outputs.tested_sha }}`,
+read from that QA run's `head_sha`, not the review workflow's commit.
 An existing failure issue, if any, is `${{ needs.validate_run.outputs.existing_issue }}`.
 
 1. Read that run's jobs and relevant failed-step logs with the GitHub tools.
    Do not inspect a different repository or run.
-2. Report the QA conclusion, observed evidence, the failing job/test if any,
+2. Report the QA conclusion, exact tested commit SHA above, observed evidence, the failing job/test if any,
    links returned by GitHub, and one next step. Separate facts from hypotheses.
 3. If QA passed, use `noop` to record the report. Do not create an issue.
 4. If QA failed and an existing issue is listed above, report its link with
    `noop`; do not create another. Otherwise request one issue with title
    `QA run <run_id>` through `create_issue`; the configured prefix is added
-   by the safe-output handler. Put the concise report in the issue body.
+   by the safe-output handler. Put the concise report and exact tested commit SHA
+   in the issue body. Never substitute a branch tip or the review workflow's SHA.
 
 The deterministic job blocks issue creation for passing or already-reported
 runs, independently of these instructions.
