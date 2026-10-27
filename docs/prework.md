@@ -62,14 +62,20 @@ extension unchanged. Use the wrapper path supplied by the facilitator:
 GH_AW_CLI=/path/to/verified-gh-aw-v0.89.21-wrapper npm run compile:workflows
 ```
 
-The current review workflow requests `copilot-requests: write` for
-organization-billed Copilot usage. That configured auth is not compatible
-with a personal token just because the repository is a personal fork. In
-particular, the `JCrossman` personal fork account does not inherit the
-`EMS/jcrossman_microsoft` organization's billing entitlement. Until the
-repository owner adapts the workflow source for an approved authentication
-method, recompiles it with the pinned compiler, and configures any required
-secrets in GitHub settings, treat Lab 2's live reviewer as **blocked**.
+This personal-fork reviewer uses the `COPILOT_GITHUB_TOKEN` Actions secret,
+not organization-billed `copilot-requests: write`. The user must create a
+fine-grained PAT owned by their personal account with **Account permissions:
+Copilot Requests: Read**, then save it directly in this repository's
+**Settings > Secrets and variables > Actions** under that exact secret name.
+Use a short expiration covering the workshop and the minimum repository
+access; no repository write permission is needed for inference. The token
+owner needs an active Copilot license. Until the secret is configured and an
+actual reviewer run verifies inference, treat live Lab 2 as **blocked**.
+
+The pinned [GH-AW authentication reference](https://github.com/github/gh-aw/blob/v0.89.21/docs/src/content/docs/reference/auth.mdx#copilot_github_token)
+documents this route. Do not add `copilot-requests: write` alongside it: that
+selects organization billing and ignores the personal secret for inference.
+GitHub reads and safe outputs continue using scoped per-run Actions tokens.
 
 Do not paste secrets into chat, reuse a broad app `GH_TOKEN`, or try to claim
 organization entitlement through an API flag. The repository owner must
