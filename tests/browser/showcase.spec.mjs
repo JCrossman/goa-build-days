@@ -46,14 +46,13 @@ test("keyboard submission and resetting keep conversation state clear", async ({
   await expect(page.locator("#run-agent")).toHaveText("Not called yet");
 });
 
-test("the code viewer shows both real implementations", async ({ page }) => {
+test("the code viewer shows the real TypeScript implementation", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: "Explore the code" }).click();
-  await expect(page.locator("#source-code")).toContainText("CreateAgentVersionAsync");
-  await page.getByRole("button", { name: "MAF hosted Optional" }).click();
-  await expect(page.locator("#source-code")).toContainText("AIFunctionFactory.Create");
+  await expect(page.locator("#source-code")).toContainText("createVersion");
+  await expect(page.getByRole("button", { name: "MAF hosted Optional" })).toHaveCount(0);
   await page.getByRole("button", { name: "Shared lookup", exact: true }).click();
-  await expect(page.locator("#source-code")).toContainText("catalogue.Lookup");
+  await expect(page.locator("#source-code")).toContainText("catalogue.lookup");
 });
 
 test("a failed request is visible and never becomes a successful conversation", async ({ page }) => {

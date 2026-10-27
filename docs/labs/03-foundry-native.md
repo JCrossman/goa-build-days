@@ -1,4 +1,4 @@
-# Lab 3: create a Foundry agent from C#
+# Lab 3: create a Foundry agent with TypeScript
 
 **Goal:** Create a real prompt agent, use it in the renewal app, and inspect
 its lookup. Complete [prework](../prework.md) first.
@@ -13,8 +13,8 @@ Keep this lab in one app conversation so later prompts can reuse those values.
 project details.
 
 ```text
-Use the microsoft-foundry skill if available; otherwise use this repo's
-linked official documentation and pinned SDK examples.
+Use the official Foundry JavaScript SDK documentation and this repository's
+pinned SDK versions.
 For this lab, use only:
 - Project endpoint: <FOUNDRY_PROJECT_ENDPOINT>
 - Existing model deployment: <MODEL_DEPLOYMENT>
@@ -32,21 +32,22 @@ workshop project. Resolve blockers before proceeding.
 
 ## 2. Read the agent definition
 
-**Mode:** Plan. **Context:** [FoundryAgents.cs](../../src/ServiceGuide.Foundry/FoundryAgents.cs),
-[instructions](../../src/ServiceGuide.Shared/AgentInstructions.txt),
-[LookupTool.cs](../../src/ServiceGuide.Shared/LookupTool.cs), and
-[NativeGuideAgent.cs](../../src/ServiceGuide.Foundry/NativeGuideAgent.cs).
+**Mode:** Plan. **Context:** `src/foundry/agents.ts`,
+`src/foundry/native-guide-agent.ts`, `src/shared/foundry-connection.ts`,
+`src/shared/lookup.ts`, `src/shared/service-catalogue.ts`, and
+`src/shared/data/services.json`.
 
 ```text
 Explain this repo's Foundry-native prompt agent in simple terms.
-Show where C# defines the model, instructions, and lookup_service schema,
+Show where TypeScript defines the model, instructions, and lookup tool,
 creates an agent version, and sends tool results back to Foundry.
 Check that it uses reviewed Alberta.ca guidance, source links, and review dates.
-Identify where lookup_service runs. Do not change code or create an agent yet.
+Identify where the lookup runs. Do not change code or create an agent yet.
 ```
 
-**Expect:** Foundry runs the agent; the local .NET server runs the lookup.
-This example does not use MAF or fetch Alberta.ca live.
+**Expect:** Foundry runs the agent; the local Node server runs the lookup.
+The app and lookup stay local. The agent uses saved guidance, not live Alberta.ca
+retrieval. This fork has no MAF runtime or selector.
 
 **Review:** Confirm it is information-only. Exit Plan mode without starting
 an implementation.
@@ -56,10 +57,10 @@ an implementation.
 **Mode:** Interactive. **Context:** The approved settings from step 1.
 
 ```text
-Create a version of the approved prompt agent using examples/FoundryNative
-and its existing "create" command. Set FOUNDRY_PROJECT_ENDPOINT,
-AZURE_AI_MODEL_DEPLOYMENT_NAME, and FOUNDRY_AGENT_NAME in that command's process.
-Use the checked-in instructions and existing model deployment.
+Run npm run foundry -- create using the approved project endpoint,
+existing model deployment, and unique agent name. Set
+FOUNDRY_PROJECT_ENDPOINT, AZURE_AI_MODEL_DEPLOYMENT_NAME, and
+FOUNDRY_AGENT_NAME in that command's process.
 Do not provision a project, deploy a model, or change access.
 Return the actual agent name and version. Stop on an error; do not use a mock.
 ```
@@ -67,6 +68,8 @@ Return the actual agent name and version. Stop on an error; do not use a mock.
 **Expect:** A real agent name and version from Foundry.
 
 **Review:** Keep the returned version. Never substitute `latest` or guess it.
+The `check` subcommand validates invocation settings only; it is not proof of
+live access.
 
 ## 4. Invoke it and open the app
 
@@ -74,12 +77,14 @@ Return the actual agent name and version. Stop on an error; do not use a mock.
 project settings.
 
 ```text
-Using exactly the agent version just created, run the FoundryNative "ask"
-command with "How do I renew my driver's licence?"
-Show the returned answer, AB-RENEW-01 source, and actual lookup_service activity.
-Then start ServiceGuide.Web with SERVICE_GUIDE_MODE=foundry and the same
-FOUNDRY_PROJECT_ENDPOINT, FOUNDRY_AGENT_NAME, and FOUNDRY_AGENT_VERSION.
-Open the app preview. Replace only a preview process you started for this lab.
+Using exactly the agent version just created, run:
+npm run foundry -- ask "How do I renew my driver's licence?"
+Set FOUNDRY_PROJECT_ENDPOINT, FOUNDRY_AGENT_NAME, and
+FOUNDRY_AGENT_VERSION to the approved values in that command's process.
+Show the returned answer, AB-RENEW-01 source, and actual lookup activity.
+Then build and start the app in Foundry mode with the same approved project
+endpoint, agent name, and agent version. Open the app preview.
+Replace only a preview process you started for this lab.
 Do not switch to offline mode if the live call fails.
 ```
 
@@ -91,7 +96,7 @@ reply**. A direct model call or a playground-only demo is not completion.
 
 ## 5. Make a small instruction change
 
-**Mode:** Plan, then approve an Interactive build. **Context:** The instructions
+**Mode:** Plan, then approve an Interactive build. **Context:** the instruction
 file and [behaviour checks](../behaviour-checks.md).
 
 ```text
@@ -100,7 +105,7 @@ Plan a small instruction change: end successful guidance answers with
 Keep the read-only lookup, official sources, review dates, privacy limits,
 and existing error behaviour. Do not change the catalogue facts.
 Show the plan before editing. After I approve, make the focused change
-and run the relevant local checks. Do not deploy it yet.
+and run npm run typecheck, npm run build, and npm test. Do not deploy it yet.
 ```
 
 **Expect:** A small reviewed diff, not another application.
@@ -112,10 +117,11 @@ and run the relevant local checks. Do not deploy it yet.
 **Mode:** Interactive. **Context:** The approved change and existing project.
 
 ```text
-Rebuild and run FoundryNative "create" using the same approved project,
+Rebuild and run npm run foundry -- create using the same approved project,
 model deployment, and agent name. Record the new version.
 Invoke that exact version with the same renewal question, then restart
 our app preview with the new version. Preserve the old version as a checkpoint.
+Set the project endpoint, agent name, and version in each command's process.
 Compare the result with docs/behaviour-checks.md and record pass, fail, or
 not run for each case. Do not invent evidence or damage shared resources
 to exercise a failure.
@@ -129,5 +135,4 @@ settings, access, and Foundry run; never hide a failed live call with offline
 output. Source or instruction changes require a rebuild and an appropriate
 new agent version.
 
-**Next:** [Optional MAF hosted agent](optional-maf-hosted.md), or choose your
-[capstone use case](../workshop-plan.md#optional-capstone-build-your-own-use-case).
+**Next:** Discuss a [possible next use case](../workshop-plan.md#optional-capstone-discuss-a-next-use-case).

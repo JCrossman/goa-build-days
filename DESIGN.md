@@ -16,4 +16,4 @@ prominent and its evidence alongside it.
   navigation, visible focus, readable contrast, and reduced-motion support.
 - Keep code inspection in the page. Avoid extra dialogs, dashboards, and decoration.
 
-The implementation's design tokens live in `src/ServiceGuide.Web/wwwroot/app.css`.
+The implementation's design tokens live in `public/app.css`.

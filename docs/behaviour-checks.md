@@ -1,7 +1,7 @@
 # Check the agent's behaviour
 
-Use the same cases for both live implementations. Review meaning and source
-data, not exact model wording.
+Use the same cases for the Foundry-backed app. Review meaning and source data,
+not exact model wording.
 
 | Case | Try | Expected |
 | --- | --- | --- |
@@ -16,18 +16,19 @@ a registry agent?" Answers must cite the reviewed snapshot, not pretend to have
 checked the website live. Online availability must be qualified by its review
 date. Do not invent offices, fees, or a renewal transaction.
 
-The deterministic suite injects a guidance-lookup failure into both implementations:
+Run the built-in Node tests with the opt-in exercise disabled:
 
-```powershell
-dotnet test .\tests\ServiceGuide.Tests
+```sh
+npm run build
+npm test
 ```
 
-For a live failure exercise, use a disposable copy of the example and a
-facilitator-reviewed failing `IServiceCatalogue` implementation. Do not damage
-shared infrastructure to cause an error. Record this live case as **not run**
-until it has actually been exercised.
+For a live failure exercise, use only a facilitator-reviewed, disposable
+configuration that causes a genuine lookup error. Do not damage shared
+infrastructure to cause an error. Record this live case as **not run** until it
+has actually been exercised.
 
 Keep the agent name/version, response, official sources, review dates, and
-observed tool activity as evidence.
-Mark cases **pass**, **fail**, or **not run**. Offline responses, scripted model
-tests, and a successful build are not proof of live model behaviour.
+observed tool activity as evidence. Mark cases **pass**, **fail**, or **not
+run**. Offline responses, scripted model tests, and a successful build are not
+proof of live model behaviour.

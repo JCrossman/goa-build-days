@@ -9,11 +9,20 @@ cannot renew a licence.
 
 - [GitHub Copilot app](https://github.com/features/ai/github-app), with access
   and its organization policy enabled.
-- Git, [GitHub CLI](https://cli.github.com/), and the .NET SDK named in `global.json`.
-- [PowerShell 7](https://learn.microsoft.com/powershell/scripting/install/install-powershell)
-  for the repository's `.ps1` scripts.
-- Node 24 and Playwright for browser checks.
-- Azure CLI for the Foundry lab; sign in yourself to the approved tenant.
+- Git and [GitHub CLI](https://cli.github.com/).
+- An isolated Node.js **24.22.1** installation, pinned by `.node-version` and
+  `.nvmrc`, with npm. Do not change a shared global Node installation.
+- [GitHub Agentic Workflows](https://github.github.com/gh-aw/) access for the
+  workflow exercise.
+- An approved identity and access to your assigned Foundry project for Lab 3.
+
+No .NET SDK or PowerShell installation is required. Install Playwright's
+Chromium browser when you prepare to run browser checks:
+
+```sh
+npm ci
+npx playwright install chromium
+```
 
 In the app, open your workshop repository. The repository's
 [`github-files` skill](../.github/skills/github-files/SKILL.md) is a navigation
@@ -33,77 +42,110 @@ Ask the facilitator or repository owner to confirm:
   the default branch and its setup check succeeds.
 
 For the app-driven CCA route, `gh issue edit --help` must list `@copilot`.
-The workshop verified this with GitHub CLI 2.102.1. Otherwise use the GitHub
-issue UI. `@copilot` assignment is not supported on GitHub Enterprise Server.
+Otherwise use the GitHub issue UI. `@copilot` assignment is not supported on
+GitHub Enterprise Server.
 
-CCA gets the issue and published repository, not your local chat history.
-Its setup installs .NET and restores locked dependencies; it needs no Azure
-credentials for the Lab 1 change. Keep its firewall enabled.
+CCA gets the issue and published repository, not your local chat history. Its
+setup installs the pinned Node version, runs `npm ci`, then type-checks and
+builds the starter; it needs no Azure credentials for the Lab 1 change. Keep
+its firewall enabled.
 
 ## 3. Prepare GH-AW
 
-Use [GitHub Agentic Workflows](https://github.github.com/gh-aw/) and the
-workshop's pinned compiler, **v0.89.21**.
+Use the workshop's pinned compiler, **gh-aw v0.89.21**. Do not upgrade a
+globally installed extension implicitly. The repository's
+`npm run compile:workflows` checks the compiler version and supports the
+verified isolated CLI wrapper through `GH_AW_CLI`; this leaves the global
+extension unchanged. Use the wrapper path supplied by the facilitator:
 
-If the extension is not installed, run this in your local terminal:
-
-```powershell
-gh extension install github/gh-aw --pin v0.89.21
-gh aw version
+```sh
+GH_AW_CLI=/path/to/verified-gh-aw-v0.89.21-wrapper npm run compile:workflows
 ```
 
-If another version is installed, ask the facilitator how to use the pinned
-version. Do not upgrade or replace an existing installation implicitly.
+The current review workflow requests `copilot-requests: write` for
+organization-billed Copilot usage. That configured auth is not compatible
+with a personal token just because the repository is a personal fork. In
+particular, the `JCrossman` personal fork account does not inherit the
+`EMS/jcrossman_microsoft` organization's billing entitlement. Until the
+repository owner adapts the workflow source for an approved authentication
+method, recompiles it with the pinned compiler, and configures any required
+secrets in GitHub settings, treat Lab 2's live reviewer as **blocked**.
 
-The repository owner must configure approved
-[Copilot engine authentication](https://github.github.com/gh-aw/engines/copilot/).
-This example uses `copilot-requests: write` for organization-billed usage;
-use an approved organization workshop repository with that capability enabled.
-For a different authentication setup, the repository owner must adapt the
-source using the linked guidance and recompile it before the class.
-Adding a personal token alone does not override this example's billing mode.
-Never paste credentials into chat or code. Signing into the desktop app does
-not authenticate the workflow engine.
+Do not paste secrets into chat, reuse a broad app `GH_TOKEN`, or try to claim
+organization entitlement through an API flag. The repository owner must
+configure the least-privilege approved workflow authentication. Signing into
+the desktop app does not authenticate the workflow engine.
 
 Confirm Actions runner availability and usage approval. Publish the workflow
 source, generated lock file, and pin files before trying manual runs.
 
 ## 4. Prepare Foundry access
 
-Open [Microsoft Foundry](https://ai.azure.com/). Obtain:
+Open [Microsoft Foundry](https://ai.azure.com/). The facilitator or project
+owner will provide the assigned project endpoint, an existing model deployment
+name, and a unique agent name for your exercise. Confirm permission to create
+and invoke agents in that project. Do not choose another subscription, create
+resources, or change access to work around a blocker.
 
-- Your assigned project endpoint and existing model deployment name.
-- Permission to create and invoke agents in that project.
-- A unique agent name for your exercise.
+The core uses the official JavaScript SDKs `@azure/ai-projects` 2.9.0 and
+`@azure/identity` 4.14.0 with `DefaultAzureCredential`. A subscription-wide
+Owner role or API key is not required for the code example. Foundry runs the
+agent in the cloud; the app and read-only guidance lookup run locally. No
+manually configured MCP server is required.
 
-Confirm that the pinned preview SDKs are approved. No subscription-wide Owner
-role or API key is required for the core code example. Keep configuration
-local and use the approved identity; never choose another subscription to
-work around a failure.
+The Microsoft Foundry skill is not required for this exercise. Use the linked
+[official JavaScript SDK documentation](https://learn.microsoft.com/en-us/javascript/api/overview/azure/ai-projects-readme?view=azure-node-latest)
+and the pinned package versions rather than guessing commands or substituting
+a direct model call.
 
-The [Microsoft Foundry skill](https://learn.microsoft.com/azure/foundry/how-to/develop/use-microsoft-foundry-skill)
-can help when approved and installed. The examples do not require a Foundry
-MCP connection.
+## 5. Check readiness locally
 
-## Optional MAF hosting
+From the repository root:
 
-Also install Azure Developer CLI (`azd`) with the `azure.ai.agents` and
-`azure.ai.projects` extensions. The deployment recipe was checked with
-azd 1.35.1; confirm the supported flags with help.
+```sh
+npm ci
+npm run typecheck
+npm run build
+npm test
+```
 
-Obtain the existing project's full Azure resource ID. Check hosted-agent
-availability, deployment permissions, runtime identity permissions, and quota.
-These are separate from prompt-agent access. The code package uses
-`dotnet_10`; Docker is not required.
+If your organization's network requires it and public npm is approved, you may
+use the public registry for this install invocation only:
 
-## 5. Check readiness in the app
+```sh
+NPM_CONFIG_REGISTRY=https://registry.npmjs.org npm ci
+```
 
-**Mode:** Interactive. **Context:** This guide and your workshop repository.
+Do not change global npm configuration to work around a proxy or registry
+failure; ask the facilitator if this approved per-command setting does not help.
+
+The intentional failure is disabled by default. Keep
+`WORKSHOP_QA_DEMONSTRATE_FAILURE` unset or false for normal checks. To run the
+offline preview after building:
+
+```sh
+SERVICE_GUIDE_MODE=offline npm start
+```
+
+PowerShell users can set the same mode for their current process with:
+
+```powershell
+$env:SERVICE_GUIDE_MODE = "offline"
+npm start
+```
+
+Offline mode is only a local rehearsal, not proof of Foundry access or live
+agent behaviour. The `.env.example` file is a reference and is not loaded
+automatically. Set private values in your own shell or approved local
+environment; never commit them.
+
+Use this copy-ready prompt for an app-assisted readiness review:
 
 ```text
 Read docs/prework.md and check the local workshop tools and repository.
 Confirm the intended remote/default branch and which required files are published.
-Run the documented local build and tests with the failure exercise disabled.
+Run npm ci, npm run typecheck, npm run build, and npm test with the failure
+exercise disabled.
 List pass, blocked, or not verified for local setup, CCA access, GH-AW engine
 authentication, and Foundry access. A login alone does not prove permission.
 Do not create issues, assign CCA, run remote workflows, change access,
@@ -112,14 +154,7 @@ or provision or deploy Azure resources during this check.
 
 Resolve blockers with the facilitator. Before the event, organizers must
 rehearse the live CCA, GH-AW, and Foundry steps with a participant account.
-Agree the usage limits, follow-on access period, and cleanup owner.
-
-If NuGet is unreachable, use an approved source. This public Microsoft mirror
-is an alternative where permitted:
-
-```powershell
-dotnet restore --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-public/nuget/v3/index.json
-```
+Agree usage limits, follow-on access period, and cleanup owner.
 
 Do not disable TLS checks or delete shared Foundry projects/models to recover.
 

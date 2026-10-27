@@ -3,7 +3,8 @@
 **Goal:** Use the Copilot app to plan a small change, create an issue, and
 review a pull request produced by Copilot cloud agent (CCA).
 
-Complete [prework](../prework.md). Work in **your assigned organization workshop repository**,
+Complete [prework](../prework.md). Work in **your assigned workshop repository**
+(an approved personal fork or organization copy),
 with the starter and `copilot-setup-steps.yml` already on its default branch.
 CCA cannot read uncommitted files or plans on your laptop.
 
@@ -13,9 +14,8 @@ with the links returned by the earlier steps.
 
 ## 1. Define the change before writing code
 
-**Mode:** Plan. **Context:** `AGENTS.md`,
-`src/ServiceGuide.Shared/Data/services.json`, and
-`tests/ServiceGuide.Tests/CatalogueTests.cs`.
+**Mode:** Plan. **Context:** `AGENTS.md`, `src/shared/data/services.json`,
+and `tests/catalogue.test.ts`.
 
 ```text
 Plan one small change to the renewal guide: recognize "paperwork" as a
@@ -24,12 +24,15 @@ Acceptance checks:
 - "paperwork" and "PAPERWORK" return AB-RENEW-03.
 - The official source URL, review date, and guidance text stay unchanged.
 - Existing lookup, no-match, and error behaviour still passes.
-Limit changes to the catalogue keywords and CatalogueTests.cs.
+Change only the keywords in src/shared/data/services.json and add focused
+coverage in tests/catalogue.test.ts. Preserve all guidance facts, wording,
+source URLs, and review dates.
+Run npm test after the change.
 Show the implementation plan, focused tests, and anything unclear.
 Do not change workflows, dependencies, or Azure resources.
 ```
 
-**Expect:** A short specification and plan. The existing starter does not
+**Expect:** A short specification and plan. The current starter does not
 recognize `paperwork` alone; that is the change you will delegate.
 
 **Review:** Confirm the scope and checks. Exit planning **without starting a

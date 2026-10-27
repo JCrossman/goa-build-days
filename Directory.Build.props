@@ -1,7 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-</Project>

@@ -18,10 +18,10 @@ export default defineConfig({
     { name: "mobile", use: { ...devices["Pixel 5"], browserName: "chromium" } },
   ],
   webServer: {
-    command: `dotnet run --project "${join("src", "ServiceGuide.Web")}" --no-build --no-launch-profile --urls ${baseURL}`,
+    command: "node dist/src/web/server.js",
     url: `${baseURL}/health`,
     reuseExistingServer: false,
     timeout: 120_000,
-    env: { SERVICE_GUIDE_MODE: "offline", ASPNETCORE_ENVIRONMENT: "Development" },
+    env: { SERVICE_GUIDE_MODE: "offline", PORT: "5089", HOST: "127.0.0.1" },
   },
 });

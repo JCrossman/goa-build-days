@@ -11,7 +11,7 @@ use Actions and Copilot usage; confirm access with the facilitator first.
 
 | File | Job |
 | --- | --- |
-| [workshop-qa.yml](../../.github/workflows/workshop-qa.yml) | Runs build, .NET, and browser checks in GitHub Actions. Tests decide pass or fail. |
+| [workshop-qa.yml](../../.github/workflows/workshop-qa.yml) | Runs type-check, build, Node, and browser checks in GitHub Actions. Tests decide pass or fail. |
 | [qa-review.md](../../.github/workflows/qa-review.md) | Human-readable instructions for Copilot to explain one QA run. |
 | [qa-review.lock.yml](../../.github/workflows/qa-review.lock.yml) | Generated Actions workflow. Do not edit it by hand. |
 
@@ -20,6 +20,14 @@ Foundry. The reviewer reads GitHub evidence; it cannot fix code or merge.
 Before the agent starts, a deterministic job validates the selected run and
 checks for an existing report. Issue creation is blocked for passing or
 already-reported runs.
+
+The checked-in reviewer currently uses organization-billed
+`copilot-requests: write` authentication. A personal fork does not inherit
+that billing entitlement. The repository owner must first adapt and recompile
+the source for the workshop's approved authentication and configure any
+required GitHub-side secrets. If that is not complete, treat live reviewer
+runs as blocked; do not paste secrets into chat or replace the auth with a
+broad app token.
 
 Copy each text prompt into the Copilot app chat. Replace `<QA_RUN_ID>` with
 the numeric ID returned by the QA run, not a PR number or the review run's ID.
@@ -40,15 +48,22 @@ Do not edit, compile, publish, or run anything yet.
 **Expect:** A clear explanation of tests versus AI investigation.
 
 **Review:** Find `workflow_dispatch` and `create-issue` with `max: 1`.
-There must be no automatic merge, deployment, or agent assignment.
+There must be no automatic merge, deployment, or agent assignment. Confirm
+that the current organization-billed authentication is available before
+planning any live run.
 
-## 2. Make one small workflow change
+## 2. After Lab 1, make one small workflow change
 
 **Mode:** Interactive. **Context:** `qa-review.md`.
 
+Do not perform this adaptation before completing and merging Lab 1. This
+exercise reports the exact tested commit SHA from the QA run; it does not
+change the workflow's authority or authentication.
+
 ```text
 Update the QA review instructions to include the tested commit SHA in
-each report and failure issue, using the value from the inspected QA run.
+each report and failure issue, using the exact commit SHA from the inspected
+Workshop QA run. Do not guess or use the review workflow's commit.
 Keep the trigger, validation step, permissions, limits, and safe outputs unchanged.
 Edit only qa-review.md. Do not hand-edit the lock file or run the workflow.
 Show the source diff for review.
@@ -63,8 +78,8 @@ Show the source diff for review.
 **Mode:** Interactive. **Context:** The reviewed Markdown change.
 
 ```text
-Run scripts/Compile-Workflows.ps1 to compile and validate qa-review.
-Use gh-aw v0.89.21; do not upgrade tools implicitly.
+Use the verified isolated gh-aw v0.89.21 wrapper configured through GH_AW_CLI
+to run npm run compile:workflows. Leave the global extension unchanged.
 Review the Markdown, generated lock file, and any compiler-required pin files.
 If compilation succeeds, create a pull request containing only this workflow
 change and its generated support changes. Return the PR link.
@@ -88,7 +103,8 @@ Track the exact run you start and return its URL, numeric run ID, and conclusion
 Do not start the agentic reviewer yet or report a pending run as passed.
 ```
 
-**Expect:** Passing .NET and browser checks, an Actions summary, and test evidence.
+**Expect:** Passing TypeScript, Node, and browser checks, an Actions summary,
+and test evidence.
 
 **Review:** Open the run and confirm the actual result. If it failed, inspect
 that failure before continuing.

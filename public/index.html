@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<!--
+THESIS: Alberta licence renewal guidance beside its official sources, not a renewal portal.
+OWN-WORLD: Cool paper, navy ink, blue actions, flat source rows, and system typography.
+STORY: Understand the next renewal step, open Alberta.ca, then inspect the TypeScript example.
+FIRST VIEWPORT: Conversation on the left; execution path and latest evidence on the right.
+FORM: The approved single-page workshop workbench, with no competing visual concepts.
+-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Alberta driver's licence renewal guide | GoA Build Days</title>
+  <link rel="icon" href="/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/app.css">
+  <script src="/app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#message">Skip to your message</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="GoA Build Days home">
+        <img src="/mark.svg" width="32" height="32" alt="">
+        <span>GoA <strong>Build Days</strong></span>
+      </a>
+      <a class="code-link" href="#code-lab">Explore the code <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page-heading">
+      <div>
+        <h1>Alberta driver's licence renewal guide</h1>
+        <p>Understand what to prepare, where to renew, and your next step.</p>
+      </div>
+      <span class="mode-badge" id="mode-badge">Checking configuration</span>
+    </div>
+    <p class="demo-note"><strong>Workshop demo, not an official government service.</strong> This app explains renewal steps; it cannot renew your licence.</p>
+    <nav class="official-links" aria-label="Official Alberta.ca pages">
+      <a href="https://www.alberta.ca/renew-replace-drivers-licence">Read the official renewal guide <span aria-hidden="true">&nearr;</span></a>
+      <a href="https://www.alberta.ca/lookup/find-a-registry-agent.aspx">Find a registry agent <span aria-hidden="true">&nearr;</span></a>
+    </nav>
+    <p class="guidance-note" id="guidance-note">Saved Alberta.ca guidance, not a live website check. Check the official pages before you act.</p>
+    <div class="notice" id="connection-notice" role="status">
+      Loading the app configuration...
+    </div>
+
+    <div class="workbench">
+      <section class="conversation-panel" aria-labelledby="conversation-heading">
+        <div class="panel-heading">
+          <h2 id="conversation-heading">Your conversation</h2>
+          <button class="text-button" id="reset" type="button" disabled>New conversation</button>
+        </div>
+        <div class="conversation-body">
+          <div class="welcome" id="welcome">
+            <div class="welcome-mark" aria-hidden="true"><img src="/mark.svg" width="40" height="40" alt=""></div>
+            <h3>Plan your next renewal step</h3>
+            <p>Ask about renewing your licence, preparing documents, or finding a registry. Answers link back to reviewed Alberta.ca guidance.</p>
+            <div class="suggestions" aria-label="Example questions">
+              <button type="button" data-prompt="How do I renew my driver's licence?">How do I renew my licence? <span aria-hidden="true">&nearr;</span></button>
+              <button type="button" data-prompt="What should I bring to a registry to renew my licence?">What should I bring? <span aria-hidden="true">&nearr;</span></button>
+              <button type="button" data-prompt="Where can I find a registry agent?">Where can I find a registry? <span aria-hidden="true">&nearr;</span></button>
+            </div>
+          </div>
+          <div class="messages" id="messages" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions"></div>
+        </div>
+        <section class="results" id="results" aria-labelledby="results-heading" hidden>
+          <h3 id="results-heading">Guidance and official sources</h3>
+          <ul id="service-results"></ul>
+        </section>
+        <div class="request-status" id="request-status" role="status" hidden>
+          <span class="spinner" aria-hidden="true"></span> Waiting for the agent...
+        </div>
+        <div class="error" id="error" role="alert" hidden></div>
+        <form id="chat-form" class="composer">
+          <label for="message">Your message</label>
+          <textarea id="message" name="message" rows="2" maxlength="1000" required
+            placeholder="For example: Can I renew my driver's licence online?"
+            aria-describedby="message-help"></textarea>
+          <p class="privacy-note" id="message-help">Use example situations only. Do not enter licence numbers, birth dates, addresses, health numbers, medical details, or personal documents.</p>
+          <div class="composer-footer">
+            <span>Guidance only. No transactions. <span class="keyboard-hint">Enter to send.</span></span>
+            <button class="secondary-button" type="button" id="stop" hidden>Stop request</button>
+            <button class="primary-button" type="submit" id="send" disabled>Send message <span aria-hidden="true">&rarr;</span></button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="evidence-panel" aria-labelledby="evidence-heading">
+        <h2 id="evidence-heading">Behind the reply</h2>
+        <p class="aside-intro">One app. A real Foundry prompt agent.</p>
+        <ol class="flow">
+          <li><span class="step-number">1</span><div><strong>You describe a need</strong><span>The Node.js app sends your message.</span></div></li>
+          <li><span class="step-number">2</span><div><strong id="flow-agent">Foundry prompt agent</strong><span id="flow-agent-detail">Instructions and tools defined in TypeScript.</span></div></li>
+          <li><span class="step-number">3</span><div><strong>Reviewed renewal guidance</strong><span id="flow-tool-detail">The app searches saved Alberta.ca summaries.</span></div></li>
+        </ol>
+        <section class="run-info" aria-labelledby="run-heading">
+          <h3 id="run-heading">Latest run</h3>
+          <dl>
+            <div><dt>Implementation</dt><dd id="run-implementation">Not called yet</dd></div>
+            <div><dt>Agent</dt><dd id="run-agent">Not called yet</dd></div>
+            <div><dt>Version</dt><dd id="run-version">Not verified</dd></div>
+          </dl>
+        </section>
+        <section class="tool-section" aria-labelledby="tools-heading">
+          <h3 id="tools-heading">Tool activity</h3>
+          <p class="empty-evidence" id="empty-evidence">Send a request to see the actual lookup and source IDs here.</p>
+          <ol class="tool-activity" id="tool-activity"></ol>
+        </section>
+        <details class="catalogue-details">
+          <summary>Browse renewal topics</summary>
+          <ul id="catalogue"></ul>
+        </details>
+      </aside>
+    </div>
+
+    <details class="code-lab" id="code-lab">
+      <summary><span>Read the code behind the experience</span><span class="summary-note">Node.js / TypeScript</span></summary>
+      <div class="code-content">
+        <p>The files below are embedded from this build. Change the source in the Copilot app, rebuild, and try your request again.</p>
+        <div class="code-tabs" aria-label="Code examples">
+          <button type="button" data-example="native" aria-pressed="true">Foundry SDK <span>Core</span></button>
+          <button type="button" data-example="tool" aria-pressed="false">Shared lookup</button>
+          <button type="button" data-example="instructions" aria-pressed="false">Instructions</button>
+        </div>
+        <div class="code-file"><span id="code-file">Loading source...</span><button type="button" id="copy-code" disabled>Copy code</button></div>
+        <pre tabindex="0" aria-label="Example source code"><code id="source-code"></code></pre>
+        <p id="code-status" role="status"></p>
+      </div>
+    </details>
+    <footer>
+      <p><strong>Public guidance, synthetic user scenarios.</strong> Use Alberta.ca or a registry agent for current requirements and personal decisions.</p>
+      <span>Specify. Build. Check. Learn.</span>
+    </footer>
+  </main>
+</body>
+</html>

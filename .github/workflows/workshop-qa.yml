@@ -24,24 +24,23 @@ jobs:
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           persist-credentials: false
-      - name: Install .NET
-        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
-        with:
-          global-json-file: global.json
       - name: Install Node
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
-          node-version: '24'
+          node-version-file: .node-version
           cache: npm
-      - name: Restore
-        run: dotnet restore GoaBuildDays.sln --locked-mode
-      - name: Build
-        run: dotnet build GoaBuildDays.sln --no-restore
-      - name: Run .NET checks
-        id: dotnet
-        run: dotnet test tests/ServiceGuide.Tests --no-build --no-restore --logger "trx;LogFileName=qa.trx" --results-directory artifacts/dotnet
-      - name: Install browser checks
+      - name: Install locked dependencies
         run: npm ci
+      - name: Type-check
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
+      - name: Run Node checks
+        id: node
+        run: |
+          mkdir -p artifacts/node
+          npm test > artifacts/node/qa.tap 2>&1 || { cat artifacts/node/qa.tap; exit 1; }
+          cat artifacts/node/qa.tap
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Run browser checks
@@ -50,12 +49,12 @@ jobs:
       - name: Summarize the checks
         if: always()
         env:
-          DOTNET_RESULT: ${{ steps.dotnet.outcome }}
+          NODE_RESULT: ${{ steps.node.outcome }}
           BROWSER_RESULT: ${{ steps.browser.outcome }}
         run: |
           {
             echo "## Workshop QA"
-            echo "- .NET checks: ${DOTNET_RESULT:-not run}"
+            echo "- Node checks: ${NODE_RESULT:-not run}"
             echo "- Browser checks: ${BROWSER_RESULT:-not run}"
             echo "- Intentional failure selected: $WORKSHOP_QA_DEMONSTRATE_FAILURE"
             echo ""
@@ -67,7 +66,7 @@ jobs:
         with:
           name: workshop-qa-evidence
           path: |
-            artifacts/dotnet
+            artifacts/node
             playwright-report
             test-results
           if-no-files-found: warn
