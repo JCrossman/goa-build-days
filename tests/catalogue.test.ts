@@ -11,6 +11,8 @@ const topics = [
   ["How do I renew my LICENSE?", "AB-RENEW-01"],
   ["Can I renew my licence online?", "AB-RENEW-02"],
   ["What should I bring to a registry?", "AB-RENEW-03"],
+  ["paperwork", "AB-RENEW-03"],
+  ["PAPERWORK", "AB-RENEW-03"],
   ["My licence has expired", "AB-RENEW-04"],
   ["Where can I find a registry agent?", "AB-RENEW-05"],
   ["renewal fees", "AB-RENEW-06"],
@@ -36,7 +38,6 @@ for (const query of ["", "  ", "Can you help me get started?"]) {
 for (const query of [
   "citizen tax credits", "meeting rooms", "renewable energy",
   "How do I renew my fishing licence?", "Renew my business license", "vehicle registration renewal",
-  "paperwork", "PAPERWORK",
 ]) {
   test(`unsupported request does not invent a match: ${query}`, () => {
     assert.equal(catalogue.lookup(query).status, "not_found");
