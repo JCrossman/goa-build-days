@@ -88,7 +88,10 @@ and invoke agents in that project. Do not choose another subscription, create
 resources, or change access to work around a blocker.
 
 The core uses the official JavaScript SDKs `@azure/ai-projects` 2.9.0 and
-`@azure/identity` 4.14.0 with `DefaultAzureCredential`. A subscription-wide
+`@azure/identity` 4.13.0 with `DefaultAzureCredential`. The shared identity pin
+also constrains the SDK's transitive copy, avoiding the MSAL version affected
+by [GHSA-xcx6-jx8p-x3h5](https://github.com/advisories/GHSA-xcx6-jx8p-x3h5).
+A subscription-wide
 Owner role or API key is not required for the code example. Foundry runs the
 agent in the cloud; the app and read-only guidance lookup run locally. No
 manually configured MCP server is required.
