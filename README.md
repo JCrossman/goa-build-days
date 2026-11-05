@@ -95,6 +95,11 @@ makes no model calls and does not count as a deployed agent. Without offline
 mode, the app uses the Foundry path and reports setup or live-call errors; it
 does not silently fall back.
 
+The message-first interface uses outgoing blue bubbles, neutral guide replies,
+and a compact composer. Enter sends; Shift+Enter adds a line. Official citations
+stay beside replies, with detailed guidance, agent/tool evidence, and code in
+expandable sections. Stop request cancels a pending reply without inventing an answer.
+
 Official renewal and registry-finder links remain usable without chat. All
 modes use saved guidance, not live website retrieval. A live agent response
 does not mean Alberta.ca was checked live.
@@ -130,7 +135,7 @@ npm run test:browser
 
 The test command runs the built Node.js built-in test runner. The browser suite
 starts and stops its own offline server on port 5089, separate from the
-preview. Current local verification passed 74 Node unit/HTTP/SDK checks and 20
+preview. Current local verification passed 74 Node unit/HTTP/SDK checks and 28
 browser checks across desktop and mobile viewports.
 The core test coverage is ported into `tests/catalogue.test.ts`,
 `tests/configuration.test.ts`, `tests/native-agent.test.ts`,

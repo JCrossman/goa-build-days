@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <!--
-THESIS: Alberta licence renewal guidance beside its official sources, not a renewal portal.
-OWN-WORLD: Cool paper, navy ink, blue actions, flat source rows, and system typography.
-STORY: Understand the next renewal step, open Alberta.ca, then inspect the TypeScript example.
-FIRST VIEWPORT: Conversation on the left; execution path and latest evidence on the right.
-FORM: The approved single-page workshop workbench, with no competing visual concepts.
+THESIS: A familiar message thread for renewal guidance, not a workshop dashboard.
+OWN-WORLD: White conversation, cool grey replies, blue outgoing bubbles, system typography.
+STORY: Ask a synthetic renewal question, read a reply, then inspect its official sources.
+FIRST VIEWPORT: Compact guide header, scrollable thread, bottom composer with circular send.
+FORM: User-requested iMessage-inspired conversation; workshop evidence uses disclosure.
 -->
 <head>
   <meta charset="utf-8">
@@ -29,32 +29,23 @@ FORM: The approved single-page workshop workbench, with no competing visual conc
   </header>
 
   <main class="page">
-    <div class="page-heading">
-      <div>
-        <h1>Alberta driver's licence renewal guide</h1>
-        <p>Understand what to prepare, where to renew, and your next step.</p>
-      </div>
-      <span class="mode-badge" id="mode-badge">Checking configuration</span>
-    </div>
+    <h1>Alberta driver's licence renewal guide</h1>
     <p class="demo-note"><strong>Workshop demo, not an official government service.</strong> This app explains renewal steps; it cannot renew your licence.</p>
     <nav class="official-links" aria-label="Official Alberta.ca pages">
       <a href="https://www.alberta.ca/renew-replace-drivers-licence">Read the official renewal guide <span aria-hidden="true">&nearr;</span></a>
       <a href="https://www.alberta.ca/lookup/find-a-registry-agent.aspx">Find a registry agent <span aria-hidden="true">&nearr;</span></a>
     </nav>
-    <p class="guidance-note" id="guidance-note">Saved Alberta.ca guidance, not a live website check. Check the official pages before you act.</p>
-    <div class="notice" id="connection-notice" role="status">
-      Loading the app configuration...
-    </div>
-
     <div class="workbench">
       <section class="conversation-panel" aria-labelledby="conversation-heading">
         <div class="panel-heading">
-          <h2 id="conversation-heading">Your conversation</h2>
+          <div>
+            <h2 id="conversation-heading">Renewal guide</h2>
+            <span class="mode-badge" id="mode-badge" aria-live="polite">Checking configuration</span>
+          </div>
           <button class="text-button" id="reset" type="button" disabled>New conversation</button>
         </div>
-        <div class="conversation-body">
+        <div class="conversation-body" tabindex="0" aria-label="Message thread">
           <div class="welcome" id="welcome">
-            <div class="welcome-mark" aria-hidden="true"><img src="/mark.svg" width="40" height="40" alt=""></div>
             <h3>Plan your next renewal step</h3>
             <p>Ask about renewing your licence, preparing documents, or finding a registry. Answers link back to reviewed Alberta.ca guidance.</p>
             <div class="suggestions" aria-label="Example questions">
@@ -64,31 +55,44 @@ FORM: The approved single-page workshop workbench, with no competing visual conc
             </div>
           </div>
           <div class="messages" id="messages" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions"></div>
-        </div>
-        <section class="results" id="results" aria-labelledby="results-heading" hidden>
-          <h3 id="results-heading">Guidance and official sources</h3>
-          <ul id="service-results"></ul>
-        </section>
-        <div class="request-status" id="request-status" role="status" hidden>
-          <span class="spinner" aria-hidden="true"></span> Waiting for the agent...
+          <details class="results" id="results" hidden>
+            <summary>Guidance and official sources</summary>
+            <ul id="service-results"></ul>
+          </details>
+          <div class="request-status" id="request-status" role="status" hidden>
+            <span class="typing-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span class="visually-hidden">Waiting for the agent...</span>
+          </div>
         </div>
         <div class="error" id="error" role="alert" hidden></div>
         <form id="chat-form" class="composer">
-          <label for="message">Your message</label>
-          <textarea id="message" name="message" rows="2" maxlength="1000" required
-            placeholder="For example: Can I renew my driver's licence online?"
-            aria-describedby="message-help"></textarea>
-          <p class="privacy-note" id="message-help">Use example situations only. Do not enter licence numbers, birth dates, addresses, health numbers, medical details, or personal documents.</p>
+          <label class="visually-hidden" for="message">Your message</label>
+          <div class="composer-input">
+            <textarea id="message" name="message" rows="1" maxlength="1000" required
+              placeholder="Message the renewal guide"
+              aria-describedby="message-help keyboard-help"></textarea>
+            <button class="send-button stop-button" type="button" id="stop" aria-label="Stop request" hidden>
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>
+            </button>
+            <button class="send-button" type="submit" id="send" aria-label="Send message" disabled>
+              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
           <div class="composer-footer">
-            <span>Guidance only. No transactions. <span class="keyboard-hint">Enter to send.</span></span>
-            <button class="secondary-button" type="button" id="stop" hidden>Stop request</button>
-            <button class="primary-button" type="submit" id="send" disabled>Send message <span aria-hidden="true">&rarr;</span></button>
+            <details class="privacy-note">
+              <summary>Use example situations only. No personal details.</summary>
+              <p id="message-help">Do not enter licence numbers, birth dates, addresses, health numbers, medical details, or personal documents.</p>
+            </details>
+            <span class="keyboard-hint" id="keyboard-help">Enter to send &middot; Shift+Enter for a new line</span>
           </div>
         </form>
       </section>
 
-      <aside class="evidence-panel" aria-labelledby="evidence-heading">
-        <h2 id="evidence-heading">Behind the reply</h2>
+      <details class="evidence-panel">
+        <summary>Behind the reply <span class="summary-note">Agent, tools and saved guidance</span></summary>
+        <div class="evidence-content">
+        <p class="guidance-note" id="guidance-note">Saved Alberta.ca guidance, not a live website check. Check the official pages before you act.</p>
+        <div class="notice" id="connection-notice" role="status">Loading the app configuration...</div>
         <p class="aside-intro">One app. A real Foundry prompt agent.</p>
         <ol class="flow">
           <li><span class="step-number">1</span><div><strong>You describe a need</strong><span>The Node.js app sends your message.</span></div></li>
@@ -112,7 +116,8 @@ FORM: The approved single-page workshop workbench, with no competing visual conc
           <summary>Browse renewal topics</summary>
           <ul id="catalogue"></ul>
         </details>
-      </aside>
+        </div>
+      </details>
     </div>
 
     <details class="code-lab" id="code-lab">

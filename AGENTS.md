@@ -12,7 +12,7 @@ installation pinned by `.node-version` and `.nvmrc`; do not change a shared
 global runtime. Use `npm ci`,
 `npm run typecheck`, `npm run build`, and `npm test` as appropriate. The browser
 suite is `npx playwright install chromium` followed by
-`npm run test:browser` (20 browser checks across desktop and mobile
+`npm run test:browser` (28 browser checks across desktop and mobile
 viewports). Core tests are in `tests/{catalogue,configuration,native-agent,web,workshop-qa}.test.ts`.
 The historical MAF-only `MafAgentTests` and hosted-envelope cases from
 `NativeAgentTests` are excluded because this fork has no MAF runtime. The

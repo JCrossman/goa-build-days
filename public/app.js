@@ -8,6 +8,7 @@ let activeRequest = null;
 let requestGeneration = 0;
 let sourceGeneration = 0;
 let sourceText = "";
+let composing = false;
 const officialSources = new Set([
   "https://www.alberta.ca/renew-replace-drivers-licence",
   "https://www.alberta.ca/new-drivers-licence-and-identification-cards",
@@ -61,14 +62,38 @@ function sourceReference(service) {
   return reference;
 }
 
-function appendMessage(role, text) {
+function scrollConversation(force = false) {
+  const body = document.querySelector(".conversation-body");
+  if (force || body.scrollHeight - body.scrollTop - body.clientHeight < 100) {
+    body.scrollTop = body.scrollHeight;
+  }
+}
+
+function resizeComposer() {
+  messageInput.style.height = "auto";
+  messageInput.style.height = `${Math.min(messageInput.scrollHeight, 144)}px`;
+}
+
+function appendMessage(role, text, services = []) {
+  const body = document.querySelector(".conversation-body");
+  const follow = role === "user" || body.scrollHeight - body.scrollTop - body.clientHeight < 100;
   byId("welcome").hidden = true;
   const item = element("div", undefined, `message ${role}`);
   item.append(element("div", role === "user" ? "You" : "Renewal guide", "message-label"));
   item.append(element("div", text, "message-body"));
+  if (services.length) {
+    const citations = element("div", undefined, "message-sources");
+    for (const service of services) {
+      sourceReference(service);
+      const link = element("a", `${service.id} / ${service.sourceTitle}`);
+      link.href = service.sourceUrl;
+      link.title = `Source reviewed ${service.reviewedOn}`;
+      citations.append(link);
+    }
+    item.append(citations);
+  }
   byId("messages").append(item);
-  const body = document.querySelector(".conversation-body");
-  body.scrollTop = body.scrollHeight;
+  if (follow) scrollConversation(true);
 }
 
 function renderTurn(turn) {
@@ -118,7 +143,11 @@ async function refreshConversation() {
   const history = await api("/api/conversation");
   byId("messages").replaceChildren();
   byId("welcome").hidden = history.messages.length > 0;
-  for (const message of history.messages) appendMessage(message.role, message.text);
+  for (const [index, message] of history.messages.entries()) {
+    appendMessage(message.role, message.text,
+      index === history.messages.length - 1 && message.role === "assistant"
+        ? history.lastTurn?.services ?? [] : []);
+  }
   if (history.lastTurn) renderTurn(history.lastTurn);
   else {
     byId("results").hidden = true;
@@ -138,6 +167,9 @@ function setPending(pending) {
   byId("reset").disabled = pending || resetting || !initialized;
   byId("request-status").hidden = !pending;
   byId("messages").setAttribute("aria-busy", String(pending));
+  document.querySelectorAll("[data-prompt]").forEach(button => {
+    button.disabled = pending || resetting || !initialized || !configured;
+  });
 }
 
 async function loadStatus() {
@@ -156,12 +188,16 @@ async function loadStatus() {
 document.querySelectorAll("[data-prompt]").forEach((button) => {
   button.addEventListener("click", () => {
     messageInput.value = button.dataset.prompt;
+    resizeComposer();
     messageInput.focus();
   });
 });
 
+messageInput.addEventListener("input", resizeComposer);
+messageInput.addEventListener("compositionstart", () => { composing = true; });
+messageInput.addEventListener("compositionend", () => { composing = false; resizeComposer(); });
 messageInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
+  if (event.key === "Enter" && !event.shiftKey && !event.isComposing && !composing && event.keyCode !== 229) {
     event.preventDefault();
     if (!activeRequest && configured && initialized && !resetting) byId("chat-form").requestSubmit();
   }
@@ -183,6 +219,7 @@ byId("chat-form").addEventListener("submit", async (event) => {
   setPending(true);
   appendMessage("user", text);
   messageInput.value = "";
+  resizeComposer();
   try {
     const turn = await api("/api/chat", {
       method: "POST",
@@ -191,13 +228,14 @@ byId("chat-form").addEventListener("submit", async (event) => {
     });
     if (generation !== requestGeneration) return;
     renderTurn(turn);
-    appendMessage("assistant", turn.answer);
+    appendMessage("assistant", turn.answer, turn.services);
   } catch (error) {
     if (generation !== requestGeneration) return;
     showError(error.name === "AbortError"
-      ? "Request stopped. The conversation below reflects the last saved reply."
+      ? "Request stopped. Your message is ready to try again; the thread shows the last saved reply."
       : error.message);
-    messageInput.value = text;
+    if (!messageInput.value) messageInput.value = text;
+    resizeComposer();
     try { await refreshConversation(); }
     catch (refreshError) { showError(`${error.message} The saved conversation could not be refreshed: ${refreshError.message}`); }
   } finally {
@@ -220,6 +258,7 @@ byId("reset").addEventListener("click", async () => {
     await refreshConversation();
     showError("");
     messageInput.value = "";
+    resizeComposer();
     messageInput.focus();
   } catch (error) {
     showError(error.message);
