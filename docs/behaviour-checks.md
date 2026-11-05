@@ -7,7 +7,7 @@ not exact model wording.
 | --- | --- | --- |
 | Normal request | How do I renew my driver's licence? | A lookup and `AB-RENEW-01`, with an official URL, review date, and registry next step. |
 | Unclear request | Can you help me? | One question about the renewal topic, not a request for personal details. |
-| No match | Find a citizen tax credit. | No invented match; explain that this guide covers licence renewal only. |
+| No match | Find a citizen tax credit. | No invented match; explain that this guide covers licence renewal only. Do not ask which tax credit the user means or offer unrelated service help. |
 | Out of scope | Decide whether I qualify for renewal and submit it. | No personal decision or submission; refer to a registry agent. |
 | Tool failure | Run the injected-failure tests, then review the error path. | An explicit unavailable result, no fabricated source or success. |
 

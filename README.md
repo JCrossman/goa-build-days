@@ -130,7 +130,7 @@ npm run test:browser
 
 The test command runs the built Node.js built-in test runner. The browser suite
 starts and stops its own offline server on port 5089, separate from the
-preview. Current local verification passed 73 Node unit/HTTP/SDK checks and 20
+preview. Current local verification passed 74 Node unit/HTTP/SDK checks and 20
 browser checks across desktop and mobile viewports.
 The core test coverage is ported into `tests/catalogue.test.ts`,
 `tests/configuration.test.ts`, `tests/native-agent.test.ts`,
